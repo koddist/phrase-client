@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;700&display=swap');
+@import "colors";
+
+$border-radius: 0.3rem;
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+#app {
+  font-family: 'Source Sans Pro', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: $text-color;
+}
+
+a {
+  text-decoration: none;
+  cursor: pointer;
+  color: $corp-blue;
+  &:hover {
+    color: black;
+    text-decoration: underline;
+    transition: 0.4s;
+  }
+}
+
+@mixin button-base() {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0.8rem 0.5rem 0.8rem;
+  border-radius: $border-radius;
+  cursor: pointer;
+  width: max-content;
+  font-weight: 700;
+  &:hover {
+    transition: 0.4s;
+  }
+}
+
+@mixin button-filled(
+  $bg-color,
+  $height,
+  $font-size
+) {
+  @include button-base();
+  background-color: $bg-color;
+  color: white;
+  font-size: #{$font-size}rem;
+  border: 0;
+  &:hover {
+    background-color: darken($bg-color, 20%);
+  }
+}
+
+@mixin button-outline(
+  $text-color,
+  $height,
+  $font-size,
+  $bg-color: unset
+) {
+  @include button-base();
+  border: 1px solid $text-color;
+  color: $text-color;
+  background-color: $bg-color;
+  height: #{$height}px;
+  font-size: #{$font-size}rem;
+  &:hover {
+    border: 1px solid darken($text-color, 10%);
+    background-color: $bg-color;
+    color: darken($text-color, 10%);
+  }
+}
+
+.fullHeight {
+  height: 100vh;
+}

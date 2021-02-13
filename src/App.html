@@ -1,0 +1,16 @@
+<div id="app">
+    <template v-if="!logged">
+        <Auth></Auth>
+    </template>
+    <div class="container" v-bind:class="{ fullHeight: !logged }">
+        <div class="header">
+            <div class="title">
+                <img alt="Phrase" src="https://developers.phrase.com/api/phrase-logo.png"> <span class="title-desc">Code challenge</span>
+            </div>
+            <div class="login" v-if="logged">
+                <button class="header-button" type="button" @click="logOut()">Logout</button>
+            </div>
+        </div>
+    </div>
+    <router-view/>
+</div>

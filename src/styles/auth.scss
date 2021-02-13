@@ -1,0 +1,87 @@
+@import "colors";
+@import "style";
+
+.modal {
+  background-color: white;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 99;
+  width: max-content;
+  border: 1px solid $grey-10;
+  border-radius: 7px;
+  padding: 3rem;
+}
+
+.login-form {
+  label {
+    span {
+      padding-bottom: 0.3rem;
+      color: $grey-50;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.5rem;
+  }
+  display: flex;
+  flex-direction: column;
+  input {
+    border: 1px solid $grey-30;
+    border-radius: 3px;
+    height: 30px;
+    margin-bottom: 0.3rem;
+    padding: 0.5rem;
+    box-sizing: border-box;
+  }
+}
+
+.login-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  button.login {
+    margin-top: 0.5rem;
+    @include button-filled($corp-green, 35, 0.8);
+    &:disabled {
+      background: $grey-10;
+    }
+  }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity .5s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform .5s;
+}
+
+.slide-enter,
+.slide-leave-to {
+  transform: translateX(-50%) translateY(-50vw);
+}
+
+.login-header {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-bottom: 1rem;
+  .close-icon {
+    position: absolute;
+    cursor: pointer;
+    top: -30px;
+    right: -30px;
+  }
+}
