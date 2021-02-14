@@ -6,13 +6,22 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     logged: false,
+    user: '',
+    notification: {
+      status: false,
+      message: '',
+      type: '',
+    },
   },
   mutations: {
-    USER_LOGIN: (state) => {
-      state.logged = true;
+    updateNotification: (state, notification) => {
+      state.notification = notification;
     },
-    USER_LOGOUT: (state) => {
-      state.logged = false;
+    updateLoggedStatus: (state, status) => {
+      state.logged = status;
+    },
+    updateCurrentUser: (state, user) => {
+      state.user = user;
     },
   },
   actions: {

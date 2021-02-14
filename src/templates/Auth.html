@@ -3,6 +3,7 @@
         <div class="login-header">
             <h3>Login</h3>
         </div>
+        <Notification v-if="notifications.status" :msg="notifications.message" :type="notifications.type"></Notification>
         <div class="login-form">
             <label>
                 <span>E-Mail</span>
@@ -14,7 +15,7 @@
             </label>
         </div>
         <div class="login-footer">
-            <button :disabled="validateForm()" type="button" class="login" @click="login()">Login</button>
+            <button :disabled="this.validateForm()" type="button" class="login" @click="login()">Login</button>
         </div>
     </div>
 </transition>
