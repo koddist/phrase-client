@@ -105,10 +105,9 @@ export default class Projects extends Vue {
     .projects {
       display: grid;
       grid-gap: 2rem;
-      grid-template-columns: auto auto auto auto;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
       justify-content: center;
       .project {
-        max-width: 350px;
         display: flex;
         flex-direction: column;
         align-items: flex-start;

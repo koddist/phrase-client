@@ -1,4 +1,32 @@
-<template src="@/templates/Auth.html"></template>
+<template>
+  <transition name="slide" appear>
+    <div class="modal">
+      <div class="login-header">
+        <h3>Login</h3>
+      </div>
+      <Notification
+        v-if="notifications.status" :msg="notifications.message" :type="notifications.type"/>
+      <div class="login-form">
+        <label>
+          <span>E-Mail</span>
+          <input type="email" v-model="email">
+        </label>
+        <label>
+          <span>Password</span>
+          <input type="password" v-model="password">
+        </label>
+      </div>
+      <div class="login-footer">
+        <button
+          :disabled="this.validateForm()"
+          type="button"
+          class="login"
+          @click="login()"
+        >Login</button>
+      </div>
+    </div>
+  </transition>
+</template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
