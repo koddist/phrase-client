@@ -1,6 +1,6 @@
 <div id="app">
     <template v-if="!this.logged">
-        <Auth></Auth>
+        <Auth @loginSuccessful="checkProjects()"></Auth>
     </template>
     <div class="container" :class="{ fullHeight: !this.logged }">
         <div class="header">
@@ -8,12 +8,13 @@
                 <img alt="Phrase" src="https://developers.phrase.com/api/phrase-logo.png"> <span class="title-desc">Code challenge</span>
             </div>
             <div class="login" v-if="this.logged">
-                <span v-if="user"><account-icon :size="iconSize"></account-icon>{{ user }}</span>
+                <button class="header-button margin-x" type="button" @click="checkProjects()">Update projects</button>
+                <span v-if="name"><account-icon :size="iconSize"></account-icon>{{ name }}</span>
                 <button class="header-button" type="button" @click="logOut()">Logout</button>
             </div>
         </div>
         <div class="content" v-if="this.logged">
-            <Projects :projects="this.projects"></Projects>
+            <Projects :key="componentKey" :projects="this.projects" @projectUpdated="checkProjects()"></Projects>
         </div>
     </div>
     <router-view></router-view>

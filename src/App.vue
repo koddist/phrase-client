@@ -20,7 +20,7 @@ import { Project } from '@/models/login.model';
   computed: {
     ...mapState({
       logged: 'logged',
-      user: 'user',
+      name: 'name',
     }),
   },
   methods: {
@@ -33,6 +33,11 @@ import { Project } from '@/models/login.model';
 export default class App extends Vue {
   iconSize = 15;
   projects: Project[] = [];
+  componentKey = 0;
+
+  forceRerender() {
+    this.componentKey += 1;
+  }
 
   created() {
     this.checkProjects();
@@ -55,6 +60,7 @@ export default class App extends Vue {
       this.updateNotification({ status: false });
       this.updateLoggedStatus(true);
       this.projects = response.data;
+      this.forceRerender();
     }).catch((e) => {
       if (e.response.status !== 401) {
         this.showNotification(

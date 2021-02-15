@@ -6,7 +6,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     logged: false,
-    user: '',
+    name: '',
     notification: {
       status: false,
       message: '',
@@ -20,8 +20,8 @@ export default new Vuex.Store({
     updateLoggedStatus: (state, status) => {
       state.logged = status;
     },
-    updateCurrentUser: (state, user) => {
-      state.user = user;
+    updateCurrentUser: (state, name) => {
+      state.name = name;
     },
   },
   actions: {

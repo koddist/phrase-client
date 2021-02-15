@@ -87,6 +87,7 @@ export default class Auth extends Vue {
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('expDate', response.data.expires_at);
       this.getCurrentUser(localStorage.getItem('token') as string);
+      this.$emit('loginSuccessful');
     }).catch((e) => {
       if (e.response.status === 401) {
         this.showNotification(true, 'Wrong e-mail or password', 'warning');
