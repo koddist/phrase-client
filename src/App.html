@@ -14,7 +14,8 @@
             </div>
         </div>
         <div class="content" v-if="this.logged">
-            <Projects :key="componentKey" :projects="this.projects" @projectUpdated="checkProjects()"></Projects>
+            <Projects v-if="projects" :key="componentKey" :projects="updatedProjects" @projectUpdated="checkProjects()"></Projects>
+            <Pagination v-model="pagination" :totalRecords="projects.length" :perPageOptions="perPageOptions" />
         </div>
     </div>
     <router-view></router-view>

@@ -4,6 +4,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import Auth from '@/components/Auth.vue';
 import Projects from '@/components/Projects.vue';
+import Pagination from '@/components/Pagination.vue';
 import MenuIcon from 'vue-material-design-icons/Menu.vue';
 import AccountIcon from 'vue-material-design-icons/Account.vue';
 import axios from 'axios';
@@ -14,6 +15,7 @@ import { Project } from '@/models/login.model';
   components: {
     Auth,
     Projects,
+    Pagination,
     MenuIcon,
     AccountIcon,
   },
@@ -34,6 +36,22 @@ export default class App extends Vue {
   iconSize = 15;
   projects: Project[] = [];
   componentKey = 0;
+  perPageOptions = ['4', '8', '16', '64'];
+  pagination = { page: 1, per_page: this.perPageOptions[0] };
+
+  get updatedProjects() {
+    let data;
+    if (!this.projects) {
+      data = [];
+    } else {
+      const firstIndex = (this.pagination.page - 1) * this.pagination.per_page;
+      const lastIndex = this.pagination.page * this.pagination.per_page;
+
+      data = this.projects.slice(firstIndex, lastIndex);
+    }
+    this.forceRerender();
+    return data;
+  }
 
   forceRerender() {
     this.componentKey += 1;
