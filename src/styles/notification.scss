@@ -1,0 +1,25 @@
+.danger {
+    background-color: darkred;
+}
+.warning {
+    background-color: orange;
+}
+.success {
+    background-color: green;
+}
+.notification-container {
+    display: flex;
+    border-radius: 0.3rem;
+    color: white;
+    padding: 0.35rem 0.5rem 0.45rem 0.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+    max-width: 150px;
+    span {
+        margin-top: 2px;
+    }
+    .text {
+        margin-left: 0.4rem;
+        text-align: left;
+    }
+}

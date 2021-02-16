@@ -32,6 +32,16 @@
           padding-top: 0.35rem;
         }
       }
+      .header-button-logout {
+        @include button-outline(white, 40, 0.9);
+        padding: 0.5rem 0rem 0.5rem 0rem;
+        span:nth-child(2) {
+          background-color: orange;
+          color: white;
+          border-radius: 3px;
+          padding: 0.3rem 0.7rem 0.3rem 0.7rem;
+        }
+      }
       .header-button {
         @include button-outline(white, 40, 0.9);
       }

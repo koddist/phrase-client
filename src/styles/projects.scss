@@ -1,0 +1,75 @@
+@import "colors";
+
+@mixin smallButton($color) {
+  background-color: $color;
+  margin-left: 0.3rem;
+  border: 0;
+  border-radius: 3px;
+  padding: 0.2rem;
+  color: white;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.hide {
+  display: none !important;
+}
+
+.projects-container {
+  padding: 2% 2% 4% 2%;
+  margin-right: auto;
+  margin-left: auto;
+  p.no-data {
+    color: $grey-50;
+    font-size: 1.2rem;
+  }
+  .projects {
+    display: grid;
+    grid-gap: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    justify-content: center;
+    .project {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      border-radius: 10px;
+      overflow: clip;
+      img {
+        width: 100%;
+        max-height: 300px;
+      }
+      .content {
+        width: 100%;
+        display: flex;
+        padding: 0.8rem;
+        box-sizing: border-box;
+        align-items: flex-start;
+        background-color: $grey-10;
+        flex-direction: column;
+        .edit-button {
+          @include smallButton(orange);
+        }
+        .edit-mode {
+          width: 100%;
+          display: grid;
+          grid-template-columns: auto auto;
+          height: 35px;
+          margin-top: 0.5rem;
+          .save-button {
+            @include smallButton(green)
+          }
+        }
+        p {
+          font-weight: 600;
+          font-size: 1.3rem;
+        }
+        span {
+          align-self: flex-end;
+          margin-top: 1rem;
+          color: $grey-50;
+          font-size: 0.85rem;
+        }
+      }
+    }
+  }
+}
