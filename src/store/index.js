@@ -1,12 +1,9 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+import { createStore } from 'vuex';
 
-Vue.use(Vuex);
-
-export default new Vuex.Store({
+export default createStore({
   state: {
     logged: false,
-    name: '',
+    customerName: '',
     notification: {
       status: false,
       message: '',
@@ -21,7 +18,7 @@ export default new Vuex.Store({
       state.logged = status;
     },
     updateCurrentUser: (state, name) => {
-      state.name = name;
+      state.customerName = name;
     },
   },
   actions: {

@@ -1,4 +1,4 @@
-# phrase
+# phrase-vue
 
 ## Project setup
 ```

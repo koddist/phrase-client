@@ -1,115 +1,154 @@
-<template src="@/App.html"></template>
+<template>
+  <Auth v-if="!logged" @loginSuccessful="init()"/>
+  <div class="container" :class="{ fullHeight: !logged }">
+    <div class="header">
+      <div class="title">
+        <img alt="Phrase" src="https://developers.phrase.com/api/phrase-logo.png"> <span class="title-desc">Code challenge</span>
+      </div>
+      <div class="login" v-if="logged">
+        <button
+          class="header-button margin-x"
+          type="button"
+          @click="checkProjects()">Update projects</button>
+        <button class="header-button-logout" type="button" @click="logOut()">
+          <span v-if="customerName">{{ customerName }}</span>
+          <span>Logout</span>
+        </button>
+      </div>
+    </div>
+    <div class="content" v-if="logged">
+      <Projects
+        v-if="projects"
+        :key="componentKey"
+        :projects="updatedProjects"
+        @projectUpdated="checkProjects()"/>
+      <Pagination
+        @paginated="getPages($event)"
+        :totalRecords="projects.length"
+        :perPageOptions="perPageOptions" />
+    </div>
+  </div>
+</template>
 
-<script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import Auth from '@/components/Auth.vue';
-import Projects from '@/components/Projects.vue';
-import Pagination from '@/components/Pagination.vue';
-import MenuIcon from 'vue-material-design-icons/Menu.vue';
-import AccountIcon from 'vue-material-design-icons/Account.vue';
+<script>
+import { mapState, mapMutations } from 'vuex';
 import axios from 'axios';
-import { mapMutations, mapState } from 'vuex';
-import { Project } from '@/models/login.model';
+import Auth from './components/Auth.vue';
+import Projects from './components/Projects.vue';
+import Pagination from './components/Pagination.vue';
 
-@Component({
+export default {
+  name: 'App',
   components: {
     Auth,
     Projects,
     Pagination,
-    MenuIcon,
-    AccountIcon,
+  },
+  data() {
+    const perPageOptions = ['4', '8', '16', '64'];
+    return {
+      userLogged: localStorage.getItem('userLogged') === 'true',
+      projects: [],
+      componentKey: 0,
+      perPageOptions,
+      pagination: { page: 1, per_page: perPageOptions[0] },
+    };
+  },
+  created() {
+    if (this.userLogged) {
+      this.init();
+    }
   },
   computed: {
     ...mapState({
       logged: 'logged',
-      name: 'name',
+      customerName: 'customerName',
     }),
+    updatedProjects() {
+      let data;
+      if (!this.projects) {
+        data = [];
+      } else {
+        const firstIndex = (this.pagination.page - 1) * this.pagination.per_page;
+        const lastIndex = this.pagination.page * this.pagination.per_page;
+        data = this.projects.slice(firstIndex, lastIndex);
+      }
+      this.forceRerender();
+      return data;
+    },
   },
   methods: {
     ...mapMutations([
       'updateNotification',
       'updateLoggedStatus',
+      'updateCurrentUser',
     ]),
-  },
-})
-export default class App extends Vue {
-  iconSize = 15;
-  projects: Project[] = [];
-  componentKey = 0;
-  perPageOptions = ['4', '8', '16', '64'];
-  pagination = { page: 1, per_page: this.perPageOptions[0] };
-
-  get updatedProjects() {
-    let data;
-    if (!this.projects) {
-      data = [];
-    } else {
-      const firstIndex = (this.pagination.page - 1) * this.pagination.per_page;
-      const lastIndex = this.pagination.page * this.pagination.per_page;
-
-      data = this.projects.slice(firstIndex, lastIndex);
-    }
-    this.forceRerender();
-    return data;
-  }
-
-  forceRerender() {
-    this.componentKey += 1;
-  }
-
-  created() {
-    this.checkProjects();
-  }
-
-  showNotification(status: boolean, message?: string, type?: string) {
-    const data = {
-      status,
-      message,
-      type,
-    };
-    this.updateNotification(data);
-  }
-
-  checkProjects() {
-    const token = localStorage.getItem('token') as string;
-    axios.get('https://api.phrase.com/v2/projects', {
-      auth: { username: token, password: '' },
-    }).then((response: { data: Project[] }) => {
-      this.updateNotification({ status: false });
-      this.updateLoggedStatus(true);
-      this.projects = response.data;
-      this.forceRerender();
-    }).catch((e) => {
-      if (e.response.status !== 401) {
-        this.showNotification(
-          true,
-          'The authentication session has expired. Please sign-in again.',
-          'warning',
-        );
-      }
-    });
-  }
-
-  logOut() {
-    const authId: string = localStorage.getItem('authId') as string;
-    const username: string = localStorage.getItem('username') as string;
-    const password: string = prompt('Please enter your password for signing out') as string;
-    if (password) {
-      axios.delete(`https://api.phrase.com/v2/authorizations/${authId}`, {
-        auth: { username, password },
+    init() {
+      this.checkProjects();
+      this.getCurrentUser(localStorage.getItem('token'));
+    },
+    forceRerender() {
+      this.componentKey += 1;
+    },
+    getPages(pages) {
+      this.pagination = pages;
+    },
+    showNotification(status, message, type) {
+      const data = {
+        status,
+        message,
+        type,
+      };
+      this.updateNotification(data);
+    },
+    // eslint-disable-next-line camelcase
+    checkProjects() {
+      const token = localStorage.getItem('token');
+      // eslint-disable-next-line camelcase
+      axios.get('https://api.phrase.com/v2/projects', {
+        auth: { username: token, password: '' },
       }).then((response) => {
-        if (response.status === 204) {
-          this.updateLoggedStatus(false);
-          this.showNotification(true, 'You was successfully signed out.', 'success');
+        this.updateNotification({ status: false });
+        this.updateLoggedStatus(true);
+        this.projects = response.data;
+        this.forceRerender();
+      }).catch((e) => {
+        if (e.response.status !== 401) {
+          this.showNotification(
+            true,
+            'The authentication session has expired. Please sign-in again.',
+            'warning',
+          );
         }
       });
-    }
-  }
-}
-
+    },
+    logOut() {
+      const authId = localStorage.getItem('authId');
+      const username = localStorage.getItem('username');
+      const password = prompt('Please enter your password for signing out');
+      if (password) {
+        axios.delete(`https://api.phrase.com/v2/authorizations/${authId}`, {
+          auth: { username, password },
+        }).then((response) => {
+          if (response.status === 204) {
+            this.updateLoggedStatus(false);
+            this.showNotification(true, 'You was successfully signed out.', 'success');
+            localStorage.setItem('logged', 'no');
+          }
+        });
+      }
+    },
+    getCurrentUser(token) {
+      axios.get('https://api.phrase.com/v2/user', {
+        auth: { username: token, password: '' },
+      }).then((response) => {
+        this.updateCurrentUser(response.data.name);
+      });
+    },
+  },
+};
 </script>
 
 <style lang="scss">
-@import "src/styles/style";
-@import "src/styles/app";
+@import "styles/app.scss";
 </style>
