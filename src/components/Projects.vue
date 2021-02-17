@@ -6,7 +6,7 @@
            v-for="project in projects"
            :key="project.name">
         <img v-if="project.project_image_url" alt="Phrase" :src="project.project_image_url">
-        <img v-if="!project.project_image_url" src="../assets/project.jpg">
+        <img alt="Phrase" v-if="!project.project_image_url" src="../assets/project.jpg">
         <div class="content">
           <p>{{ project.name }}
             <button class="edit-button" type="button"
@@ -14,7 +14,10 @@
           </p>
           <div class="edit-mode hide">
             <input type="text" :value="project.name">
-            <button class="save-button" @click="updateProject($event, project.id)">Save</button>
+            <button
+              type="button"
+              class="save-button"
+              @click="updateProject($event, project.id)">Save</button>
           </div>
           <span>Project was updated {{ getRelativeTime(project.updated_at) }}</span>
         </div>
@@ -48,9 +51,9 @@ export default {
   methods: {
     editName(event) {
       if (event.target.parentNode.nextSibling.classList.contains('hide')) {
-        event.target.parentNode.nextSibling.classList.remove('hide');
+        event.target.parentNode.nextSibling.classList.replace('hide', 'show');
       } else {
-        event.target.parentNode.nextSibling.classList.add('hide');
+        event.target.parentNode.nextSibling.classList.replace('show', 'hide');
       }
     },
     updateProject(event, projectId) {

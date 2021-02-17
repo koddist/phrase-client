@@ -12,7 +12,11 @@
 }
 
 .hide {
-  display: none !important;
+  display: none;
+}
+
+.show {
+  display: grid;
 }
 
 .projects-container {
@@ -51,7 +55,6 @@
         }
         .edit-mode {
           width: 100%;
-          display: grid;
           grid-template-columns: auto auto;
           height: 35px;
           margin-top: 0.5rem;

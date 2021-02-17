@@ -3,17 +3,17 @@
   <div class="container" :class="{ fullHeight: !logged }">
     <div class="header">
       <div class="title">
-        <img alt="Phrase" src="https://developers.phrase.com/api/phrase-logo.png"> <span class="title-desc">Code challenge</span>
+        <img class="logo" alt="Phrase" src="https://developers.phrase.com/api/phrase-logo.png"> <span class="title-desc">Code challenge</span>
       </div>
-      <div class="login" v-if="logged">
+      <div class="actions-box" v-if="logged">
         <button
-          class="header-button margin-x"
+          class="update-button margin-x"
           type="button"
           @click="checkProjects()">Update projects</button>
-        <button class="header-button-logout" type="button" @click="logOut()">
-          <span v-if="customerName">{{ customerName }}</span>
-          <span>Logout</span>
-        </button>
+        <div class="logout-box">
+          <p class="name">{{ customerName }}</p>
+          <button type="button" class="logout-button" @click="logOut()">Logout</button>
+        </div>
       </div>
     </div>
     <div class="content" v-if="logged">
@@ -47,7 +47,7 @@ export default {
   data() {
     const perPageOptions = ['4', '8', '16', '64'];
     return {
-      userLogged: localStorage.getItem('userLogged') === 'true',
+      userLogged: this.userLoggedStatus('true'),
       projects: [],
       componentKey: 0,
       perPageOptions,
@@ -113,6 +113,7 @@ export default {
         this.projects = response.data;
         this.forceRerender();
       }).catch((e) => {
+        this.userLoggedStatus('false');
         if (e.response.status !== 401) {
           this.showNotification(
             true,
@@ -133,7 +134,7 @@ export default {
           if (response.status === 204) {
             this.updateLoggedStatus(false);
             this.showNotification(true, 'You was successfully signed out.', 'success');
-            localStorage.setItem('logged', 'no');
+            this.userLoggedStatus('false');
           }
         });
       }
@@ -143,7 +144,12 @@ export default {
         auth: { username: token, password: '' },
       }).then((response) => {
         this.updateCurrentUser(response.data.name);
+      }).catch(() => {
+        this.userLoggedStatus('false');
       });
+    },
+    userLoggedStatus(status) {
+      localStorage.setItem('userLogged', status);
     },
   },
 };
